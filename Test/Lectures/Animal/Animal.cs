@@ -9,68 +9,74 @@
         /// Имя.
         /// </summary>
         private string name;
-        private bool gender;
-        private Guid id;
-        private DateTime birthDate;
 
-        protected Animal(string name, bool gender, DateTime birthDate)
+        protected Animal()
         {
-            this.Name = name;
-            this.gender = gender;
-            this.id = Guid.NewGuid();
-            this.birthDate = birthDate;
         }
 
-        protected string Name
+        protected Animal(string name, Gender gender, DateOnly birthDate)
         {
-            get
+            this.Id = Guid.NewGuid();
+
+            this.Name = name;
+            this.Gender = gender;
+            this.BirthDate = birthDate;
+        }
+
+        public string Name
+        {
+            get => this.name;
+            protected set
             {
-                return name;
-            }
-            set
-            {
-                if (string.IsNullOrEmpty(value))
+                if (string.IsNullOrWhiteSpace(value))
                 {
                     throw new ArgumentNullException("Имя должно быть!");
                 }
-                name = value;
+
+                this.name = value;
             }
         }
-        protected bool Gender { get { return gender; } }
-        protected Guid Id { get { return id; } }
 
-        protected DateTime BirthDate { get { return birthDate; } }
+        protected Gender Gender { get; }
 
-        protected abstract string Voice();
+        protected Guid Id { get; }
+
+        protected DateOnly BirthDate { get; }
+
+        public abstract string Voice();
 
         public override string ToString()
         {
-            string sex;
-            if (Gender)
+            var gender = this.Gender switch
             {
-                sex = "м";
-            }
-            else
-            {
-                sex = "ж";
-            }
-            return $"{this.Name}, {this.BirthDate}, {sex}";
+                Gender.Male => "м",
+                Gender.Female => "ж",
+                _ => throw new ArgumentOutOfRangeException(),
+            };
+
+            return $"{this.Name}, {this.BirthDate}, {gender}";
         }
 
         public override bool Equals(object? obj)
         {
-            if (obj == null)
+            if (obj is null)
+            {
                 return false;
+            }
+
             if (ReferenceEquals(this, obj))
+            {
                 return true;
+            }
+
             if (obj.GetType() != GetType())
+            {
                 return false;
-            return this.Id.Equals((obj as Animal)!.Id);
+            }
+
+            return this.Id.Equals((obj as Animal)?.Id);
         }
 
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
+        public override int GetHashCode() => this.Id.GetHashCode();
     }
 }

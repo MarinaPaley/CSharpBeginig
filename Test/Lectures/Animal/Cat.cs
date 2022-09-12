@@ -1,13 +1,18 @@
-﻿
-namespace Animals
+﻿namespace Animals
 {
     public class Cat : Animal
     {
-        public Cat(string name, bool gender, DateTime birthDate) : base(name, gender, birthDate)
+        [Obsolete("For ORM only", true)]
+        protected Cat()
+            : base()
         {
         }
 
-        protected override string Voice() => "Мяу!";
+        public Cat(string name, Gender gender, DateOnly birthDate)
+            : base(name, gender, birthDate)
+        {
+        }
 
+        public override string Voice() => "Мяу!";
     }
 }
