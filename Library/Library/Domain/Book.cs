@@ -6,7 +6,7 @@
         {
             if (string.IsNullOrEmpty(title))
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(title));
             }
 
             this.Title = title;

@@ -54,7 +54,13 @@ namespace Domain
 
         public override string ToString()
         {
-            return $"{LastName} {FirstName} {MiddleName}";
+            var fullName = $"{LastName} {FirstName[0]}{"."}";
+            if (this.MiddleName is not null)
+            {
+                fullName = $"{fullName}{this.MiddleName[0]}{"."}";
+            }
+
+            return fullName;
         }
     }
 }
