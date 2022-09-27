@@ -88,5 +88,26 @@ using System;
             // Assert
             Assert.AreEqual(expected, actual);
         }
+
+        [Test]
+        public void GetBook_ValidData_Success()
+        {
+            // Arrange
+            var author = new Author("Толстой", "Лев", "Николаевич");
+            var book1 = new Book("Война и мир", author);
+            var book2 = new Book("Анна Каренина", author);
+
+            // Act
+            author.Books.Add(book1);
+            author.Books.Add(book2);
+            var count = author.Books.Count;
+
+            // Assert
+            Assert.AreEqual(count, 2);
+            Assert.IsTrue(author.Books.Contains(book1));
+            Assert.AreEqual(author.Books.Contains(book2), true);
+            Assert.AreEqual(book2.Authors.Contains(author), true);
+
+        }
     }
 }

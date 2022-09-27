@@ -1,6 +1,7 @@
-﻿/// <summary>
-/// 
-/// </summary>
+﻿// <copyright file="Author.cs" company="Васильева Марина Алексеевна">
+// Copyright (c) Васильева Марина Алексеевна. All rights reserved.
+// </copyright>
+
 namespace Domain
 {
     /// <summary>
@@ -8,7 +9,15 @@ namespace Domain
     /// </summary>
     public class Author
     {
-        public Author(string lastName, string firstName, 
+        /// <summary>
+        /// Инициализирует новый экземпляр класса <see cref="Author"/>.
+        /// </summary>
+        /// <param name="lastName"> Фамилия. </param>
+        /// <param name="firstName"> Имя. </param>
+        /// <param name="middleName">Отчество. </param>
+        public Author(
+            string lastName,
+            string firstName,
             string? middleName)
         {
             if (string.IsNullOrWhiteSpace(firstName))
@@ -25,13 +34,18 @@ namespace Domain
             {
                 throw new ArgumentOutOfRangeException(nameof(middleName));
             }
+
             this.Id = Guid.NewGuid();
             this.FirstName = firstName;
             this.LastName = lastName;
             this.MiddleName = middleName;
         }
 
+        /// <summary>
+        /// Идентификатор.
+        /// </summary>
         public Guid Id { get; }
+
         /// <summary>
         /// Имя.
         /// </summary>
@@ -52,9 +66,20 @@ namespace Domain
         /// </summary>
         public ISet<Book> Books { get; } = new HashSet<Book>();
 
+        /// <summary>
+        /// Добавить автору книгу.
+        /// </summary>
+        /// <param name="book">Книгу.</param>
+        public void GetBook(Book book)
+        {
+            this.Books.Add(book);
+            book.Authors.Add(this);
+        }
+
+        /// <inheritdoc/>
         public override string ToString()
         {
-            var fullName = $"{LastName} {FirstName[0]}{"."}";
+            var fullName = $"{this.LastName} {this.FirstName[0]}{"."}";
             if (this.MiddleName is not null)
             {
                 fullName = $"{fullName}{this.MiddleName[0]}{"."}";
