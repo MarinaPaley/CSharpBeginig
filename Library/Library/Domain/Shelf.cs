@@ -19,25 +19,32 @@ namespace Domain
         }
 
         /// <summary>
+        /// Инициализирует новый экземпляр класса <see cref="Shelf"/>.
+        /// </summary>
+        [Obsolete("ORM only")]
+        protected Shelf()
+        { }
+
+        /// <summary>
         /// Идентификатор.
         /// </summary>
-        public Guid Id { get; }
+        public virtual Guid Id { get; }
 
         /// <summary>
         /// Номер полки.
         /// </summary>
-        public int Name { get; set; }
+        public virtual int Name { get; set; }
 
         /// <summary>
         /// Книги.
         /// </summary>
-        public ISet<Book> Books { get; set; } = new HashSet<Book>();
+        public virtual ISet<Book> Books { get; set; } = new HashSet<Book>();
 
         /// <summary>
         /// Положить книгу на полку.
         /// </summary>
         /// <param name="book"> Книга. </param>
-        public void PutBook(Book book)
+        public virtual void PutBook(Book book)
         {
             this.Books.Add(book);
             book.Shelf = this;
