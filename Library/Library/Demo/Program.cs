@@ -5,6 +5,7 @@ using DataAccessLayer;
 var author = new Author("Васильева", "Марина", "Алексеевна");
 var book = new Book("C", author);
 var shelf = new Shelf(1);
+author.Books.Add(book);
 shelf.PutBook(book);
 
 Console.WriteLine(book);
@@ -19,6 +20,8 @@ using var sessionFactory = Configurator.GetSessionFactory
 
 using (var session = sessionFactory.OpenSession())
 {
+    session.Save(author);
+    session.Save(book);
     session.Save(shelf);
     session.Flush();
 }
