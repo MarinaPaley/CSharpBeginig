@@ -3,8 +3,14 @@
     using Domain;
     using FluentNHibernate.Mapping;
 
+    /// <summary>
+    /// Класс отображения полки.
+    /// </summary>
     internal class ShelfMap : ClassMap<Shelf>
     {
+        /// <summary>
+        /// Инициализирует новый экземпляр класса <see cref="ShelfMap"/>.
+        /// </summary>
         public ShelfMap()
         {
             this.Table("Shelves");

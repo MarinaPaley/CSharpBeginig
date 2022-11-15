@@ -7,7 +7,7 @@ namespace Domain
     /// <summary>
     /// Автор.
     /// </summary>
-    public class Author
+    public class Author : IEquatable<Author>
     {
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="Author"/>.
@@ -42,35 +42,55 @@ namespace Domain
         }
 
         /// <summary>
+        /// Инициализирует новый экземпляр класса <see cref="Author"/>.
+        /// </summary>
+        [Obsolete("For ORM")]
+        protected Author()
+        {
+        }
+
+        /// <summary>
         /// Идентификатор.
         /// </summary>
-        public Guid Id { get; }
+        public virtual Guid Id { get; }
 
         /// <summary>
         /// Имя.
         /// </summary>
-        public string FirstName { get; }
+        public virtual string FirstName { get; }
 
         /// <summary>
         /// Фамилия.
         /// </summary>
-        public string LastName { get; }
+        public virtual string LastName { get; }
 
         /// <summary>
         /// Отчество.
         /// </summary>
-        public string? MiddleName { get; }
+        public virtual string? MiddleName { get; }
 
         /// <summary>
         /// Книги.
         /// </summary>
-        public ISet<Book> Books { get; } = new HashSet<Book>();
+        public virtual ISet<Book> Books { get; } = new HashSet<Book>();
+
+        /// <inheritdoc/>
+        public virtual bool Equals(Author? other)
+        {
+            return Equals(this.Id, other?.Id);
+        }
+
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            return this.Id.GetHashCode();
+        }
 
         /// <summary>
         /// Добавить автору книгу.
         /// </summary>
         /// <param name="book">Книгу.</param>
-        public void GetBook(Book book)
+        public virtual void GetBook(Book book)
         {
             this.Books.Add(book);
             book.Authors.Add(this);
@@ -86,6 +106,12 @@ namespace Domain
             }
 
             return fullName;
+        }
+
+        /// <inheritdoc/>
+        public override bool Equals(object? obj)
+        {
+            return this.Equals(obj as Author);
         }
     }
 }

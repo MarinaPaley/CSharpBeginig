@@ -7,7 +7,7 @@ namespace Domain
     /// <summary>
     /// Класс Полка.
     /// </summary>
-    public class Shelf
+    public class Shelf : IEquatable<Shelf>
     {
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="Shelf"/>.
@@ -15,6 +15,7 @@ namespace Domain
         /// <param name="name"> Номер полки. </param>
         public Shelf(int name)
         {
+            this.Id = Guid.NewGuid();
             this.Name = name;
         }
 
@@ -23,7 +24,8 @@ namespace Domain
         /// </summary>
         [Obsolete("ORM only")]
         protected Shelf()
-        { }
+        {
+        }
 
         /// <summary>
         /// Идентификатор.
@@ -53,5 +55,27 @@ namespace Domain
         /// <inheritdoc/>
         public override string ToString() =>
             $"{"Полка"} {this.Name}{":"} {string.Join(", ", this.Books)}";
+
+        /// <inheritdoc/>
+        public override bool Equals(object? obj)
+        {
+            return this.Equals(obj as Shelf);
+        }
+
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            return this.Id.GetHashCode();
+        }
+
+        /// <summary>
+        /// Метод сравнения полок.
+        /// </summary>
+        /// <param name="other">Друга яполка.</param>
+        /// <returns><see langword="true"/>, если равны, иначе – <see langword="false"/>. </returns>
+        public virtual bool Equals(Shelf? other)
+        {
+            return Equals(this.Id, other?.Id);
+        }
     }
 }

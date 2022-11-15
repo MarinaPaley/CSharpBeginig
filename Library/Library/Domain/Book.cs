@@ -7,7 +7,7 @@ namespace Domain
     /// <summary>
     /// Класс книга.
     /// </summary>
-    public class Book
+    public class Book : IEquatable<Book>
     {
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="Book"/>.
@@ -21,6 +21,7 @@ namespace Domain
                 throw new ArgumentNullException(nameof(title));
             }
 
+            this.Id = Guid.NewGuid();
             this.Title = title;
             this.Authors = authors;
         }
@@ -36,24 +37,50 @@ namespace Domain
         }
 
         /// <summary>
+        /// Инициализирует новый экземпляр класса <see cref="Book"/>.
+        /// </summary>
+        [Obsolete("FOR ORM only")]
+        protected Book()
+        {
+        }
+
+        /// <summary>
         /// Идентификатор.
         /// </summary>
-        public Guid Id { get; }
+        public virtual Guid Id { get; }
 
         /// <summary>
         /// Заголовок.
         /// </summary>
-        public string Title { get; }
+        public virtual string Title { get; }
 
         /// <summary>
         /// Авторы.
         /// </summary>
-        public ISet<Author> Authors { get; } = new HashSet<Author>();
+        public virtual ISet<Author> Authors { get; } = new HashSet<Author>();
 
         /// <summary>
         /// Полка.
         /// </summary>
-        public Shelf? Shelf { get; set; }
+        public virtual Shelf? Shelf { get; set; }
+
+        /// <inheritdoc/>
+        public virtual bool Equals(Book? other)
+        {
+            return Equals(this.Id, other?.Id);
+        }
+
+        /// <inheritdoc/>
+        public override bool Equals(object? obj)
+        {
+            return this.Equals(obj as Book);
+        }
+
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            return this.Id.GetHashCode();
+        }
 
         /// <inheritdoc/>
         public override string ToString() => $"{this.Title} {string.Join(", ", this.Authors)}";
