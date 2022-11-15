@@ -1,5 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-using Domain;
+﻿using Domain;
 using DataAccessLayer;
 
 var author = new Author("Васильева", "Марина", "Алексеевна");
@@ -10,18 +9,20 @@ shelf.PutBook(book);
 
 Console.WriteLine(book);
 Console.WriteLine(author);
+Console.WriteLine(shelf);
 
-Settings settings = new Settings();
+var settings = new Settings();
 settings.AddDabaseServer("DESKTOP-FEV6RUE");
 settings.AddDatabase("Library");
 
-using var sessionFactory = Configurator.GetSessionFactory
-    (settings, showSql: true);
+using var sessionFactory = Configurator.GetSessionFactory(settings, showSql: true);
 
 using (var session = sessionFactory.OpenSession())
 {
+    // @NOTE: Порядок важен!
+    session.Save(shelf);
     session.Save(author);
     session.Save(book);
-    session.Save(shelf);
+
     session.Flush();
 }
